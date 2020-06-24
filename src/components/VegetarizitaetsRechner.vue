@@ -29,7 +29,9 @@ export default defineComponent({
     // Bitte stellen Sie hier die benötigten Objekte (siehe return) bereit,
     // damit "veggikg" und "nonveggikg" eingegeben werden können und
     // "prozent" daraus bei jeder Änderung automatisch berechnet wird
-    
+    const veggikg = ref(0);
+    const nonveggikg = ref(1);
+    const prozent = computed( () => Math.round((veggikg.value/(veggikg.value + nonveggikg.value))* 100));
 
 
 
@@ -42,6 +44,7 @@ export default defineComponent({
       nonveggikg,
       prozent
       */
+     veggikg, nonveggikg, prozent
     };
   }
 });

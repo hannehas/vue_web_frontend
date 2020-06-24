@@ -24,7 +24,7 @@ import {
   defineComponent,
   onMounted,
   ref,
-  computed
+    computed
 } from "@vue/composition-api";
 
 import BratenListeZeile from "@/components/BratenListeZeile.vue";
@@ -39,6 +39,7 @@ export default defineComponent({
     const { liste, update, errormessage } = useBraten();
     
     // Variable "suchwort" vereinbaren
+    const suchwort = ref("");
 
 
 
@@ -50,8 +51,9 @@ export default defineComponent({
 
 
     // Funktion reloadList() soll auf Button-Druck Liste neu laden
-
-
+    function reloadList(): void{
+      location.reload();
+    }
 
 
 
@@ -64,7 +66,14 @@ export default defineComponent({
     // die ganze Liste enthalten. 
     // Bei Änderungen von "suchwort" muss "anzeigeliste" sich sofort anpassen
     
-    const anzeigeliste = liste  // bitte geeignet ersetzen
+    const anzeigeliste =  computed( () => {
+      if(suchwort.value.length < 3){
+        return liste.value;
+      }else{
+        return liste.value.filter(e => e.beschreibung.toLowerCase().includes(suchwort.value.toLowerCase()) || e.anbieter.vollname.toLowerCase().includes(suchwort.value.toLowerCase()) || 
+        e.abholort.toLowerCase().includes(suchwort.value.toLowerCase()));
+      }
+    })
 
 
 
@@ -73,7 +82,7 @@ export default defineComponent({
 
 
     return {
-      anzeigeliste,
+      anzeigeliste, reloadList, errormessage, suchwort
       /*
       reloadList,
       errormessage,
