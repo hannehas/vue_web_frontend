@@ -2,7 +2,7 @@
 // damit reactive(), compute(), ref() und Co funktionieren
 //////////////////////////////////////////////////////////////////////////////
 import Vue from 'vue'
-import CompositionApi, { reactive } from '@vue/composition-api'
+import CompositionApi, { reactive, onMounted } from '@vue/composition-api'
 Vue.use(CompositionApi)
 //////////////////////////////////////////////////////////////////////////////
 
@@ -24,21 +24,7 @@ function push(ele: Braten): void {
 
 async function update() {
 
-  try{
-    const url = 'http://localhost:9090/api/braten'
-    const response = await fetch(url)
-    const data: Array<Braten> = await response.json()
-
-    for(const i of data){
-      state.liste.push(i)
-    }
-    //state.liste = data
-    //state.liste.push(data.text)
-    state.errormessage = ""
-
-  }catch(reason){
-    state.errormessage = "Fehler bei der Serverkommunikation"
-  }
+  
   
   const bratenliste = [
     {
@@ -83,8 +69,8 @@ async function update() {
     },
 
   ]
-/*
-  fetch('http://localhost:9090/api/braten',{
+
+  fetch('http://localhost:8080/api/braten',{
     method: 'GET'
   })
   .then((resp)=>{
@@ -92,17 +78,23 @@ async function update() {
       return bratenliste;
     }
     state.errormessage="";
-    return resp.json;
+    return resp.json();
   })
-  .then((jsondata )=> {
-    //state.liste.push(jsondata);
+  .then((jsondata: Array<Braten>)=>{
+    for(let i = 0; i < jsondata.length; i++){
+        bratenliste.push(jsondata[i]);
+    }
+    state.liste = bratenliste;
   })
   .catch((fehler)=>{
     fehler.state.errormessage ="Fehler bei der Serverkommunikation";
-  })*/
+  })
   // bei jedem update() Liste verwuseln, damit man einen Effekt sieht
   //state.liste = bratenliste.sort(() => Math.random()-0.5)
 }
+onMounted(() =>{
+  update();
+});
 
 /*
  * Die exportierte use..()-Funktion gibt gezielten Zugriff auf von außen nutzbare Features
