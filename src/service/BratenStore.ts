@@ -23,6 +23,23 @@ function push(ele: Braten): void {
 
 
 async function update() {
+
+  try{
+    const url = 'http://localhost:9090/api/braten'
+    const response = await fetch(url)
+    const data: Array<Braten> = await response.json()
+
+    for(const i of data){
+      state.liste.push(i)
+    }
+    //state.liste = data
+    //state.liste.push(data.text)
+    state.errormessage = ""
+
+  }catch(reason){
+    state.errormessage = "Fehler bei der Serverkommunikation"
+  }
+  
   const bratenliste = [
     {
       "id": 2, "version": 0, "anbieter": { "loginname": "waldi", "vollname": "Waldemar Wunderlich", "nutzungsbedingungenok": true },
@@ -66,8 +83,25 @@ async function update() {
     },
 
   ]
+/*
+  fetch('http://localhost:9090/api/braten',{
+    method: 'GET'
+  })
+  .then((resp)=>{
+    if(!resp.ok){
+      return bratenliste;
+    }
+    state.errormessage="";
+    return resp.json;
+  })
+  .then((jsondata )=> {
+    //state.liste.push(jsondata);
+  })
+  .catch((fehler)=>{
+    fehler.state.errormessage ="Fehler bei der Serverkommunikation";
+  })*/
   // bei jedem update() Liste verwuseln, damit man einen Effekt sieht
-  state.liste = bratenliste.sort(() => Math.random()-0.5)
+  //state.liste = bratenliste.sort(() => Math.random()-0.5)
 }
 
 /*
