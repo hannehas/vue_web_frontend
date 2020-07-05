@@ -9,8 +9,11 @@ Vue.use(CompositionApi)
 import { computed } from '@vue/composition-api'
 
 import '@/service/Braten'
+import {Client} from '@stomp/stompjs';
 
 /**************************************************/
+const wsurl = "ws://localhost:9090/stompbroker";
+const DEST = "/topic/braten";
 
 const state = reactive({
   liste: Array<Braten>(),
@@ -25,8 +28,9 @@ function push(ele: Braten): void {
 async function update() {
 
   
-  
-  const bratenliste = [
+  const bratenliste = new Array<Braten>();
+  const alt = state.liste; 
+  /*const bratenliste = [
     {
       "id": 2, "version": 0, "anbieter": { "loginname": "waldi", "vollname": "Waldemar Wunderlich", "nutzungsbedingungenok": true },
       "abholort": "Eckstrasse 42, 54734 Wohlguck", "haltbarbis": "2021-09-27",
@@ -68,9 +72,9 @@ async function update() {
       "beschreibung": "Bereits genutzter Anbraten", "vgrad": 0
     },
 
-  ]
+  ]*/
 
-  fetch('http://localhost:8080/api/braten',{
+  fetch(`http://localhost:8080/api/braten`,{
     method: 'GET'
   })
   .then((resp)=>{
@@ -88,25 +92,58 @@ async function update() {
   })
   .catch((fehler)=>{
     fehler.state.errormessage ="Fehler bei der Serverkommunikation";
+    state.liste = alt;
   })
   // bei jedem update() Liste verwuseln, damit man einen Effekt sieht
   //state.liste = bratenliste.sort(() => Math.random()-0.5)
 }
-onMounted(() =>{
-  update();
-});
+
+async function remove(id: number){
+
+  fetch(`http://localhost:8080/api/braten/${id}`,{
+    method: 'DELETE'
+  })
+  .then((response)=>{
+    if(!response.ok){
+      throw new Error(state.errormessage);
+    }
+    update();
+  })
+  .catch((fehler)=>{
+    state.errormessage = fehler;
+  })
+
+}
 
 /*
  * Die exportierte use..()-Funktion gibt gezielten Zugriff auf von außen nutzbare Features
  * Verwendung einfach mit import und Auswahl gewünschter Features, z.B. so:
  * const { liste, update } = useBraten()
  */
+
+
+
+const stompclient = new Client({brokerURL: wsurl})
+stompclient.onConnect= ()=>{
+  stompclient.subscribe(DEST, (message)=> {
+    const m = message.body; 
+    if( m == "delete"){
+      remove(JSON.parse(m));
+    }else if(m =="change"){
+      update();
+    }
+  })
+}
+stompclient.activate();
+
 export function useBraten() {
   return {
     // computed() zur Erzeugung einer zwar reaktiven, aber read-only-Version der Liste und der Fehlermeldung
     liste: computed(() => state.liste),
     errormessage: computed(() => state.errormessage),
+    remove,
     update,
-    push
+    push,
   }
 }
+

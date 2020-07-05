@@ -12,7 +12,7 @@
         <th>Anbieter / Abholort</th>
       </thead>
       <tbody>
-        <BratenListeZeile :braten="br" v-for="br in anzeigeliste" :key="br.id" />
+        <BratenListeZeile :braten="br" v-for="br in anzeigeliste" :key="br.id" @delete-zeile="removeZeile($event)"/> <!---->
       </tbody>
     </table>
     <div class="message is-danger">{{errormessage}}</div>
@@ -36,7 +36,8 @@ export default defineComponent({
     BratenListeZeile
   },
   setup() {
-    const { liste, update, errormessage } = useBraten();
+    const { liste, update, errormessage, remove } = useBraten(); 
+    
     
     // Variable "suchwort" vereinbaren
     const suchwort = ref("");
@@ -46,7 +47,7 @@ export default defineComponent({
     
     // sobald Komponente initialisiert ist, update() zum Füllen der "liste" ausführen
     onMounted(async () => {
-      await update();
+     update();
     });
 
 
@@ -54,7 +55,10 @@ export default defineComponent({
     function reloadList(): void{
       location.reload();
     }
-
+    
+    function removeZeile(id: number){
+      remove(id);
+    }
 
 
 
@@ -74,16 +78,14 @@ export default defineComponent({
         e.abholort.toLowerCase().includes(suchwort.value.toLowerCase()));
       }
     })
-
-
-
-
-
-
+    
+ 
+    
 
     return {
-      anzeigeliste, reloadList, errormessage, suchwort
+      anzeigeliste, reloadList, errormessage, suchwort, removeZeile
       /*
+      removeZeile
       reloadList,
       errormessage,
       suchwort

@@ -2,8 +2,9 @@
   <tr class="bratenzeile">
     <td>{{braten.beschreibung}}</td>
     <td>{{braten.haltbarbis}}</td>
-    <td><StarRating :maxsterne="5" :sterne="vgrad / 25" /></td>
+    <td><StarRating :maxsterne="5" :sterne="braten.vgrad / 25" /></td>
     <td>{{braten.anbieter.vollname}}, {{braten.abholort}}</td>
+    <td><a @click="delclicked()"><i class="fa fa-trash"/></a></td>
   </tr>
 </template>
 
@@ -11,6 +12,7 @@
 import { defineComponent } from "@vue/composition-api";
 import StarRating from '@/components/StarRating.vue'
 import '@/service/Braten'
+
 
 export default defineComponent({
   name: "BratenListeZeile",
@@ -20,10 +22,16 @@ export default defineComponent({
   props: {
     braten: Object,
   },
-  setup(props) {
-    return props.braten  // Direkt Braten-Objekt zum Füllen des Templates durchreichen
+  setup(props, context) {
+
+   function delclicked(): void{
+      const braten = props.braten as Braten;
+      context.emit("delete-zeile", braten.id);
+    }
+    return {delclicked, props}; // delclicked Direkt Braten-Objekt zum Füllen des Templates durchreichen
   }
 });
+
 </script>
 
 <style scoped>

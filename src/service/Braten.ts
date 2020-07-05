@@ -12,3 +12,7 @@ interface Braten {
   beschreibung: string;
   vgrad: number;
 }
+interface BratenMessage{
+  operation: string;
+  braten: Braten;
+}
