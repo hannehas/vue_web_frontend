@@ -8,30 +8,30 @@
     </div>
 
     <div class="block">
-      <nav class="navbar">
         <div class="navbar-menu is-active">
-          <a href="/home" class="navbar-item">Bratenliste</a>
-          <a href="/welt" class="navbar-item">Bratenwelt</a>
+         <!-- <a href="/liste" class="navbar-item">Bratenliste</a>
+          <a href="/chat" class="navbar-item">Bratenwelt</a>-->
+          <router-link to ="/liste" class="navbar-item">Bratenliste </router-link>
+          <router-link to ="/chat" class="navbar-item"> Bratenchat</router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
             <a href="/logout" class="navbar-item">Logout</a>
           </div>
         </div>
-      </nav>
     </div>
 
     <div class="columns">
       <div class="column is-three-quarters">
         <div class="block">
           <div class="box">
-            <h1 class="title">Das aktuelle Angebot</h1>
-            <BratenListe/>
+            <router-view/>
           </div>
         </div>
       </div>
       <div class="column">
         <VegetarizitaetsRechner/>
+        <BratChat/>
       </div>
     </div>
   </section>
@@ -39,14 +39,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-import BratenListe from "@/components/BratenListe.vue"
 import VegetarizitaetsRechner from "@/components/VegetarizitaetsRechner.vue"
+import BratChat from "@/components/BratChat.vue"
+import router from "@/router"
 
 export default Vue.extend({
   name: "App",
   components: {
-    BratenListe,
-    VegetarizitaetsRechner
+    VegetarizitaetsRechner,
+    BratChat
   }
 });
 </script>

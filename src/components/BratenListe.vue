@@ -1,5 +1,5 @@
 <template>
-  <div class="bratenliste">
+  <div class="bratenliste">    
     <button @click="reloadList()">
       <i class="fas fa-sync" />
     </button>
@@ -12,10 +12,11 @@
         <th>Anbieter / Abholort</th>
       </thead>
       <tbody>
-        <BratenListeZeile :braten="br" v-for="br in anzeigeliste" :key="br.id" @delete-zeile="removeZeile($event)"/> <!---->
+        <BratenListeZeile :braten="br" v-for="br in anzeigeliste" :key="br.id" @delete-zeile="removeZeile($event)"/> 
       </tbody>
     </table>
     <div class="message is-danger">{{errormessage}}</div>
+    
   </div>
 </template>
 

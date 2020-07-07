@@ -1,14 +1,25 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
+import BratenListeView from "@/views/BratenListeView.vue";
+import BratenChatView from "@/views/BratenChatView.vue";
 
 Vue.use(VueRouter)
 
   const routes: Array<RouteConfig> = [
   {
+    path: '/liste',
+    name: 'BratenListeView',
+    component: BratenListeView
+  },
+  {
+    path: '/chat',
+    name: 'BratenChatView',
+    component: BratenChatView
+  },
+  {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: '/liste'
   },
   {
     path: '/about',

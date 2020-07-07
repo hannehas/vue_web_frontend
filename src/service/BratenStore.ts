@@ -126,10 +126,12 @@ async function remove(id: number){
 const stompclient = new Client({brokerURL: wsurl})
 stompclient.onConnect= ()=>{
   stompclient.subscribe(DEST, (message)=> {
-    const m = message.body; 
-    if( m == "delete"){
-      remove(JSON.parse(m));
-    }else if(m =="change"){
+    const x = JSON.parse(message.body) as BratenMessage;
+
+    if( x.operation == "delete"){
+      remove(x.braten.id);
+      
+    }else if(x.operation =="change"){
       update();
     }
   })
