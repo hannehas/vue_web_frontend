@@ -1,4 +1,8 @@
-# bratenbank-frontend
+# Webanwendung Bratenbank - Frontend
+
+Im Rahmen des Webbasierte-Anwendungen Moduls der HSRM im 4. Semster, sollte jeder eine Webanwendung zur Echtzeit Datenanzeige, durch Vorgaben von unserem Professor, entwickeln.
+Die Bratenbank ist eine Plattform, auf der Benutzer übrig gebliebenen Braten anbieten, und andere Benutzer danach suchen können.
+Dieses Repository beinhaltet das Frontend, welches sich um das Anzeigen der Daten aus dem Backend kümmert. Verwendet wird dafür die REST-Schnittstelle. Bei Änderungen im Backend aktualisiert sich automatisch das Frontend. Außerdem steht den Benutzern ein Community Chat zum gemeinsamen Austausch, eine Suchfunktion und ein Vegetarizitätsrechner zur Verfügung.
 
 ## Verwendete Pakete
 * npm install @vue/composition-api
